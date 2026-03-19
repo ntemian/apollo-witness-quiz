@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Προετοιμασία Μάρτυρα — Απόλλων Λατσούδης</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #c9a44a;
+    --accent-dim: #8a7030;
+    --danger: #d4453a;
+    --danger-dim: rgba(212, 69, 58, 0.15);
+    --success: #2d9a5c;
+    --success-dim: rgba(45, 154, 92, 0.15);
+    --warn: #d4953a;
+    --warn-dim: rgba(212, 149, 58, 0.15);
+    --text: #e8e6e1;
+    --text-dim: #8a8a9a;
+    --text-bright: #ffffff;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* INTRO SCREEN */
+  .intro {
+    text-align: center;
+    padding: 80px 20px;
+    animation: fadeIn 0.8s ease;
+  }
+
+  .intro .scales {
+    font-size: 64px;
+    margin-bottom: 24px;
+  }
+
+  .intro h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .intro .subtitle {
+    font-size: 16px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 32px;
+  }
+
+  .intro .meta {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+    line-height: 1.8;
+  }
+
+  .intro .rules {
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 40px;
+  }
+
+  .intro .rules h3 {
+    color: var(--accent);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .intro .rules ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .intro .rules li {
+    padding: 8px 0;
+    padding-left: 24px;
+    position: relative;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .intro .rules li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 40px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  .btn:hover {
+    background: #dbb65a;
+    transform: translateY(-1px);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+  }
+
+  .btn-outline:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: width 0.5s ease;
+    z-index: 100;
+  }
+
+  /* QUESTION SCREEN */
+  .question-screen {
+    animation: slideIn 0.4s ease;
+    padding-top: 40px;
+  }
+
+  .q-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .q-counter {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+
+  .q-category {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .cat-credibility { background: rgba(100, 140, 220, 0.15); color: #7cacf0; }
+  .cat-alienation { background: var(--danger-dim); color: #e86860; }
+  .cat-character { background: var(--warn-dim); color: #e8a860; }
+  .cat-knowledge { background: rgba(140, 100, 220, 0.15); color: #b090f0; }
+  .cat-trap { background: rgba(220, 60, 60, 0.2); color: #ff6b6b; border: 1px solid rgba(220, 60, 60, 0.3); }
+  .cat-lifestyle { background: rgba(220, 140, 60, 0.15); color: #e8a040; }
+
+  .lawyer-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--danger);
+    border-radius: 0 12px 12px 0;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .lawyer-name {
+    font-size: 12px;
+    color: var(--danger);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .lawyer-question {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-bright);
+    line-height: 1.5;
+  }
+
+  .lawyer-context {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .answer-area {
+    margin-bottom: 20px;
+  }
+
+  .answer-area textarea {
+    width: 100%;
+    min-height: 120px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+
+  .answer-area textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .answer-area textarea::placeholder {
+    color: var(--text-dim);
+  }
+
+  .submit-row {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  /* FEEDBACK */
+  .feedback {
+    animation: fadeIn 0.4s ease;
+    margin-top: 24px;
+  }
+
+  .feedback-card {
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .feedback-good {
+    background: var(--success-dim);
+    border: 1px solid rgba(45, 154, 92, 0.3);
+  }
+
+  .feedback-warning {
+    background: var(--warn-dim);
+    border: 1px solid rgba(212, 149, 58, 0.3);
+  }
+
+  .feedback-danger {
+    background: var(--danger-dim);
+    border: 1px solid rgba(212, 69, 58, 0.3);
+  }
+
+  .feedback h4 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .feedback-good h4 { color: var(--success); }
+  .feedback-warning h4 { color: var(--warn); }
+  .feedback-danger h4 { color: var(--danger); }
+
+  .feedback p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .model-answer {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+
+  .model-answer h4 {
+    font-size: 13px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .model-answer blockquote {
+    font-size: 15px;
+    color: var(--text-bright);
+    font-style: italic;
+    line-height: 1.7;
+    padding-left: 16px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .trap-list {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--danger-dim);
+    border-radius: 8px;
+  }
+
+  .trap-list h5 {
+    font-size: 12px;
+    color: var(--danger);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .trap-list ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .trap-list li {
+    font-size: 13px;
+    padding: 4px 0;
+    padding-left: 20px;
+    position: relative;
+    color: #e8a0a0;
+  }
+
+  .trap-list li::before {
+    content: '✕';
+    position: absolute;
+    left: 0;
+    color: var(--danger);
+    font-weight: bold;
+  }
+
+  /* RESULTS SCREEN */
+  .results {
+    text-align: center;
+    padding: 60px 20px;
+    animation: fadeIn 0.6s ease;
+  }
+
+  .score-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 6px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 32px;
+  }
+
+  .score-number {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--text-bright);
+    line-height: 1;
+  }
+
+  .score-label {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  .results h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+  }
+
+  .results-summary {
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+
+  .weak-areas {
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 40px;
+  }
+
+  .weak-areas h3 {
+    font-size: 14px;
+    color: var(--danger);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .weak-areas li {
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .weak-areas li:last-child { border: none; }
+
+  .final-reminder {
+    background: linear-gradient(135deg, rgba(201, 164, 74, 0.1), rgba(201, 164, 74, 0.05));
+    border: 1px solid var(--accent-dim);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: left;
+    margin-bottom: 40px;
+  }
+
+  .final-reminder h3 {
+    color: var(--accent);
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .final-reminder p {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hidden { display: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .container { padding: 12px; }
+    .lawyer-question { font-size: 16px; }
+    .intro h1 { font-size: 22px; }
+    .q-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+
+<div class="container">
+  <!-- INTRO -->
+  <div id="introScreen" class="intro">
+    <div class="scales">&#9878;</div>
+    <h1>Αντεξέταση Μάρτυρα</h1>
+    <div class="subtitle">Απόλλων Λατσούδης — Δίκη 20 Μαρτίου 2026</div>
+    <div class="meta">
+      Δικηγόρος αντιδίκου: <strong>Νικόλ Τσαγκαράκη</strong><br>
+      Δικηγορικό Γραφείο Μπρέγιανου — Δρούλια<br>
+      15 ερωτήσεις &bull; ~20 λεπτά
+    </div>
+
+    <div class="rules">
+      <h3>Κανόνες</h3>
+      <ul>
+        <li>Η δικηγόρος θα σου κάνει ερωτήσεις — απάντα στα Ελληνικά όπως θα απαντούσες στο δικαστήριο</li>
+        <li>Μετά από κάθε απάντηση θα δεις αξιολόγηση και τη σωστή απάντηση</li>
+        <li>Κάποιες ερωτήσεις είναι <strong>παγίδες</strong> — πρόσεχε τι λες</li>
+        <li>Κοίτα τον δικαστή, όχι τη δικηγόρο (φαντάσου τον)</li>
+        <li><strong>Αν δεν ξέρεις, πες "δεν γνωρίζω"</strong> — μην μαντεύεις ποτέ</li>
+      </ul>
+    </div>
+
+    <button class="btn" onclick="startQuiz()">ΕΝΑΡΞΗ ΑΝΤΕΞΕΤΑΣΗΣ</button>
+  </div>
+
+  <!-- QUESTION SCREEN -->
+  <div id="questionScreen" class="question-screen hidden"></div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="resultsScreen" class="results hidden"></div>
+</div>
+
+<script>
+const questions = [
+  {
+    id: 1,
+    category: "credibility",
+    catLabel: "Αξιοπιστία",
+    catClass: "cat-credibility",
+    question: "Κύριε Λατσούδη, εσείς είστε αδερφός του ενάγοντος. Θα ήταν δίκαιο να πω ότι ό,τι πείτε εδώ σήμερα, το λέτε για να βοηθήσετε τον αδερφό σας;",
+    context: "Κλασική ερώτηση αμφισβήτησης αντικειμενικότητας. Θέλει να σε βάλει σε αμυντική θέση από την αρχή.",
+    modelAnswer: "Είμαι αδερφός του, ναι. Αλλά ήρθα εδώ να πω αυτά που βλέπω. Η βελτίωση του Αίαντα δεν είναι η γνώμη μου — είναι κάτι που βλέπει ο καθένας που γνωρίζει το παιδί.",
+    traps: [
+      "Μην πεις «ήρθα να βοηθήσω τον αδερφό μου» — παραδέχεσαι μεροληψία",
+      "Μην θυμώσεις ή γίνεις αμυντικός",
+      "Μην πεις «είμαι αντικειμενικός» — φαίνεται αφελές"
+    ],
+    keyPoints: ["Παραδέξου τη σχέση, redirect στα γεγονότα", "Αναφέρσου στη βελτίωση του παιδιού"]
+  },
+  {
+    id: 2,
+    category: "knowledge",
+    catLabel: "Γνώση",
+    catClass: "cat-knowledge",
+    question: "Εσείς δεν μένετε στο ίδιο σπίτι με τον αδερφό σας και τον ανιψιό σας. Πόσο συχνά βλέπετε τον Αίαντα; Μία φορά τον μήνα; Δύο;",
+    context: "Προσπαθεί να αποδείξει ότι δεν έχεις αρκετή επαφή για να ξέρεις τι συμβαίνει.",
+    modelAnswer: "Βλέπω τον Αίαντα τακτικά — [πες τη ΣΩΣΤΗ συχνότητα]. Μιλάμε, περνάμε χρόνο μαζί. Η αλλαγή στη συμπεριφορά του είναι εμφανής κάθε φορά που τον βλέπω.",
+    traps: [
+      "Μην υπερβάλεις τη συχνότητα — αν σε πιάσουν σε ψέμα, χάνεις αξιοπιστία",
+      "Μην πεις «τον βλέπω κάθε μέρα» αν δεν ισχύει",
+      "Αν τον βλέπεις σπάνια, πες την αλήθεια — ακόμα κι αν είναι 2 φορές τον μήνα, η αλλαγή φαίνεται"
+    ],
+    keyPoints: ["Ειλικρίνεια στη συχνότητα", "Η αλλαγή είναι εμφανής ακόμα και σε μη καθημερινό παρατηρητή"]
+  },
+  {
+    id: 3,
+    category: "character",
+    catLabel: "Χαρακτήρας",
+    catClass: "cat-character",
+    question: "Κύριε Λατσούδη, γνωρίζετε αν ο αδερφός σας μαγειρεύει για τα παιδιά; Ή παραγγέλνει φαγητό;",
+    context: "Θέλει να δείξει ότι ο πατέρας δεν παρέχει βασική φροντίδα — ίσως τα παιδιά τρώνε delivery κάθε μέρα.",
+    modelAnswer: "Κάθε φορά που πάω στο σπίτι, βλέπω ότι τα παιδιά τρώνε καλά. Ο αδερφός μου φροντίζει τη διατροφή τους. Αν κάποια μέρα παραγγείλει, αυτό κάνουν όλες οι οικογένειες.",
+    traps: [
+      "Μην πεις «δεν ξέρω αν μαγειρεύει» — αδυνατίζει την εικόνα φροντιστή πατέρα",
+      "Μην πεις «μαγειρεύει κάθε μέρα» αν δεν ξέρεις — θα σε ρωτήσει «πώς ξέρετε αν δεν μένετε μαζί;»",
+      "Μην αναφέρεις κέτο δίαιτα ή βιταμίνες — θα το χρησιμοποιήσουν"
+    ],
+    keyPoints: ["Πες αυτό που βλέπεις", "Τα παιδιά φαίνονται υγιή και τρέφονται καλά", "Μη μπεις σε λεπτομέρειες"]
+  },
+  {
+    id: 4,
+    category: "trap",
+    catLabel: "ΠΑΓΙΔΑ",
+    catClass: "cat-trap",
+    question: "Γνωρίζετε ότι ο αδερφός σας κοιμάται στο ίδιο κρεβάτι με την εξάχρονη κόρη του, την Κλειώ;",
+    context: "ΕΞΑΙΡΕΤΙΚΑ ΕΠΙΚΙΝΔΥΝΗ ΕΡΩΤΗΣΗ. Στόχος: να δημιουργήσει αρνητική εντύπωση στον δικαστή, υπαινιγμός ακαταλληλότητας. Η απάντηση πρέπει να είναι ψύχραιμη.",
+    modelAnswer: "Η Κλειώ είναι 6 ετών. Πολλά μικρά παιδιά κοιμούνται κοντά στον γονέα τους — αυτό δεν είναι κάτι ασυνήθιστο. Αυτό που βλέπω είναι ένα ευτυχισμένο παιδί που αγαπάει τον πατέρα του.",
+    traps: [
+      "ΜΗΝ αναστατωθείς — αυτό ακριβώς θέλουν",
+      "ΜΗΝ πεις «δεν ξέρω τι κάνουν στο σπίτι τους» — φαίνεσαι σαν να κρύβεις κάτι",
+      "ΜΗΝ αρχίσεις να δικαιολογείσαι υπερβολικά — η υπεράσπιση δημιουργεί υποψία",
+      "ΜΗΝ πεις «και τι έχει αυτό;» αμυντικά"
+    ],
+    keyPoints: ["Κανονικοποίησε — είναι φυσιολογικό για 6χρονο", "Redirect στο αποτέλεσμα: η Κλειώ είναι ευτυχισμένη", "Ψύχραιμα, σύντομα, τέλος"]
+  },
+  {
+    id: 5,
+    category: "lifestyle",
+    catLabel: "Τρόπος Ζωής",
+    catClass: "cat-lifestyle",
+    question: "Κύριε Λατσούδη, ο αδερφός σας ασχολείται με γιόγκα, βουδισμό, σαούνα, κέτο δίαιτα, βιταμίνες... Θα μπορούσε κανείς να πει ότι ακολουθεί ένα εναλλακτικό lifestyle, σωστά; Ανήκει σε κάποια ομάδα ή κοινότητα;",
+    context: "Στόχος: να συνδέσει τα πνευματικά ενδιαφέροντα με «παραθρησκευτικές οργανώσεις» ή αστάθεια. Η λέξη «κοινότητα» = bait για να πεις κάτι για Αείφαρον κτλ.",
+    modelAnswer: "Ο αδερφός μου φροντίζει την υγεία του, όπως πολλοί άνθρωποι. Δεν ανήκει σε καμία οργάνωση. Αυτό που μετράει είναι πώς μεγαλώνει τα παιδιά του — και τα αποτελέσματα μιλούν μόνα τους.",
+    traps: [
+      "ΜΗΝ αναφέρεις Αείφαρον, Νεμέα, ή οτιδήποτε κοινότητα",
+      "ΜΗΝ μπεις σε εξήγηση τι είναι το γιόγκα ή ο βουδισμός",
+      "ΜΗΝ πεις «δεν είναι αίρεση» — η λέξη «αίρεση» δεν πρέπει να ακουστεί",
+      "ΜΗΝ κάνεις λεπτομερή ανάλυση — σύντομη απάντηση, redirect στα παιδιά"
+    ],
+    keyPoints: ["Κατηγορηματική άρνηση σε «οργανώσεις»", "Αμέσως πίσω στα παιδιά", "ΣΥΝΤΟΜΑ"]
+  },
+  {
+    id: 6,
+    category: "trap",
+    catLabel: "ΠΑΓΙΔΑ",
+    catClass: "cat-trap",
+    question: "Γνωρίζετε ότι ο αδερφός σας πήγε τα παιδιά σε κάποια κοινότητα στη Νεμέα που ονομάζεται «Αείφαρον»; Θα λέγατε ότι αυτό είναι κατάλληλο περιβάλλον για παιδιά;",
+    context: "Follow-up στα πνευματικά. Θέλει να πεις κάτι που θα ακουστεί σαν «αίρεση» ή «παραθρησκευτική οργάνωση».",
+    modelAnswer: "Δεν γνωρίζω λεπτομέρειες για κάθε εκδρομή ή δραστηριότητα. Ξέρω ότι τα παιδιά είναι καλά, χαρούμενα, και ο Αίαντας πάει πολύ καλά στο σχολείο.",
+    traps: [
+      "ΜΗΝ περιγράψεις τι είναι το Αείφαρον — ό,τι κι αν πεις θα χρησιμοποιηθεί εναντίον σας",
+      "ΜΗΝ πεις «ναι, πήγαν, δεν έχει κάτι κακό» — δέχεσαι το premise",
+      "Αν δεν ξέρεις, πες «δεν γνωρίζω»"
+    ],
+    keyPoints: ["Δεν γνωρίζω λεπτομέρειες", "Redirect στα αποτελέσματα"]
+  },
+  {
+    id: 7,
+    category: "alienation",
+    catLabel: "Αλλοτρίωση",
+    catClass: "cat-alienation",
+    question: "Κύριε Λατσούδη, θα μπορούσατε να μου πείτε αν ποτέ ο αδερφός σας μίλησε αρνητικά για τη μητέρα των παιδιών μπροστά τους; Πείτε μου ειλικρινά.",
+    context: "Ο κεντρικός ισχυρισμός αλλοτρίωσης. «Πείτε μου ειλικρινά» = τεχνική πίεσης.",
+    modelAnswer: "Ποτέ δεν τον άκουσα να μιλάει αρνητικά για τη μητέρα μπροστά στα παιδιά. Αντίθετα, τα παιδιά επικοινωνούν ελεύθερα μαζί της.",
+    traps: [
+      "ΜΗΝ πεις «μόνο σε μένα μιλάει αρνητικά» — θα ρωτήσει ΤΙ λέει",
+      "ΜΗΝ αρχίσεις να περιγράφεις τι κάνει η μητέρα αντί αυτού",
+      "Μην πεις «ποτέ» αν μπορεί να υπάρχει αντίθετο στοιχείο — πες «δεν τον άκουσα εγώ»"
+    ],
+    keyPoints: ["Δεν τον άκουσα εγώ", "Τα παιδιά μιλούν ελεύθερα με τη μητέρα τους"]
+  },
+  {
+    id: 8,
+    category: "alienation",
+    catLabel: "Αλλοτρίωση",
+    catClass: "cat-alienation",
+    question: "Ο ανιψιός σας, ο Αίαντας, σας έχει πει ποτέ κάτι αρνητικό για τη μητέρα του; Τι ακριβώς σας έχει πει;",
+    context: "ΠΑΓΙΔΑ: αν πεις τι είπε ο Αίας, θα πουν ότι «ο πατέρας τον έβαλε να λέει αυτά». Αν πεις «τίποτα», φαίνεσαι ψεύτης.",
+    modelAnswer: "Ο Αίας είναι 12 χρονών παιδί. Δεν θα ήθελα να αναφέρω συγκεκριμένα λόγια ενός παιδιού στο δικαστήριο. Αυτό που βλέπω είναι ότι σήμερα είναι ένα ήρεμο, σταθερό, χαρούμενο παιδί.",
+    traps: [
+      "ΜΗΝ αναφέρεις συγκεκριμένα λόγια του Αίαντα κατά της μητέρας — θα γυρίσει μπούμερανγκ",
+      "ΜΗΝ πεις «μου είπε ότι τον χτυπάει» — αυτό θα το πουν άλλοι μάρτυρες και οι ιατρικές εκθέσεις",
+      "ΜΗΝ πεις «δεν μου έχει πει τίποτα» — φαίνεται ψεύτικο"
+    ],
+    keyPoints: ["Προστάτεψε το παιδί — μην αναφέρεις τα λόγια του", "Redirect στο αποτέλεσμα"]
+  },
+  {
+    id: 9,
+    category: "character",
+    catLabel: "Χαρακτήρας",
+    catClass: "cat-character",
+    question: "Ο αδερφός σας είναι δικηγόρος στο επάγγελμα. Θα συμφωνούσατε ότι ξέρει πολύ καλά πώς να χειριστεί μια δικαστική υπόθεση, πώς να παρουσιάσει τα πράγματα στο δικαστήριο; Ίσως και πώς να προετοιμάσει τους μάρτυρές του;",
+    context: "Υπονοεί ότι ο Ντέμης σε έχει «σκηνοθετήσει». Αν πεις «ναι, ξέρει», τότε «άρα σας καθοδήγησε».",
+    modelAnswer: "Ο αδερφός μου δεν μου είπε τι να πω. Κανένας δεν μου είπε τι να πω. Λέω αυτά που βλέπω με τα μάτια μου.",
+    traps: [
+      "ΜΗΝ πεις «ναι, είναι πολύ καλός δικηγόρος» — θα πει «άρα ξέρει πώς να σας καθοδηγήσει»",
+      "ΜΗΝ πεις «μου εξήγησε τι θα γίνει» — θα φανεί σαν coaching",
+      "ΜΗΝ πεις «κάναμε πρόβα» ή «μου έδειξε ερωτήσεις»"
+    ],
+    keyPoints: ["Κατηγορηματικό: κανείς δεν μου είπε τι να πω", "Λέω αυτά που βλέπω"]
+  },
+  {
+    id: 10,
+    category: "trap",
+    catLabel: "ΠΑΓΙΔΑ",
+    catClass: "cat-trap",
+    question: "Κύριε Λατσούδη, εσείς πιστεύετε ότι η μητέρα δεν αγαπάει τα παιδιά της;",
+    context: "Η ΜΕΓΑΛΥΤΕΡΗ ΠΑΓΙΔΑ. Αν πεις «ναι» = φαίνεσαι εμπαθής και χάνεις αξιοπιστία. Αν πεις «αγαπάει τα παιδιά» = αδυνατίζεις τη θέση σου.",
+    modelAnswer: "Δεν είπα κάτι τέτοιο και δεν μπορώ να κρίνω τα συναισθήματά της. Αυτό που βλέπω είναι ότι ο Αίας ευδοκιμεί στο περιβάλλον του πατέρα του. Αυτό είναι γεγονός.",
+    traps: [
+      "ΠΟΤΕ μη πεις «δεν αγαπάει τα παιδιά» — ο δικαστής θα σε απαξιώσει",
+      "ΜΗΝ πεις «ναι αγαπάει αλλά...» — δίνεις πόντους στην αντίδικο",
+      "ΜΗΝ αρχίσεις να αναλύεις τι είναι η αγάπη"
+    ],
+    keyPoints: ["Δεν κρίνω συναισθήματα", "Μιλάω μόνο για αυτό που βλέπω", "ΓΕΓΟΝΟΤΑ, όχι γνώμες"]
+  },
+  {
+    id: 11,
+    category: "knowledge",
+    catLabel: "Γνώση",
+    catClass: "cat-knowledge",
+    question: "Εσείς ήσασταν παρών σε κάποιο από τα περιστατικά που ο αδερφός σας καταγγέλλει; Είδατε ποτέ τη μητέρα να χτυπήσει τον Αίαντα;",
+    context: "Αν δεν ήσουν παρών, θέλει να πεις «όχι» ώστε να πει «άρα τα μαθαίνετε από τον αδερφό σας».",
+    modelAnswer: "[Αν ΝΑΙ: πες ΑΚΡΙΒΩΣ τι είδες, πότε, πού]. [Αν ΟΧΙ:] Δεν ήμουν παρών στα συγκεκριμένα περιστατικά. Αυτά τα βεβαιώνουν οι ειδικοί που ήταν παρόντες. Εγώ βλέπω το αποτέλεσμα — ένα παιδί που τότε υπέφερε και τώρα ανθίζει.",
+    traps: [
+      "ΜΗΝ πεις ότι είδες κάτι που δεν είδες — ΨΕΥΔΟΡΚΙΑ",
+      "ΜΗΝ αρχίσεις να περιγράφεις μελανιές που σου περιέγραψαν — αν δεν τις είδες, μην τις αναφέρεις",
+      "Αν είδες κάτι, πες: «Ναι, είδα...» + ημερομηνία + τόπος + τι ακριβώς"
+    ],
+    keyPoints: ["Ειλικρίνεια πάνω απ' όλα", "Αν δεν είδες, redirect στους ειδικούς και στο αποτέλεσμα"]
+  },
+  {
+    id: 12,
+    category: "lifestyle",
+    catLabel: "Τρόπος Ζωής",
+    catClass: "cat-lifestyle",
+    question: "Γνωρίζετε ότι ο αδερφός σας δεν εμβολίαζε τα παιδιά; Ότι ήταν αντίθετος στα εμβόλια;",
+    context: "Ψεύτικο premise — η διαφωνία ήταν μόνο για τα παιδικά COVID εμβόλια. Θέλει να τον παρουσιάσει ως αντιεμβολιαστή.",
+    modelAnswer: "Δεν γνωρίζω λεπτομέρειες για τα εμβόλια. Αυτό που ξέρω είναι ότι τα παιδιά είναι υγιή και ο αδερφός μου φροντίζει τη υγεία τους — τα πηγαίνει σε γιατρούς, σε ειδικούς, σε παιδοψυχίατρο.",
+    traps: [
+      "ΜΗΝ πεις «ναι, δεν τα εμβολιάζει» — δεν ισχύει",
+      "ΜΗΝ μπεις σε συζήτηση για COVID εμβόλια",
+      "ΜΗΝ πεις «τα εμβόλια δεν χρειάζονται» — ο δικαστής θα σε κρίνει αρνητικά"
+    ],
+    keyPoints: ["Δεν γνωρίζω λεπτομέρειες", "Τα παιδιά πηγαίνουν σε γιατρούς — αυτό μετράει"]
+  },
+  {
+    id: 13,
+    category: "character",
+    catLabel: "Χαρακτήρας",
+    catClass: "cat-character",
+    question: "Κύριε Λατσούδη, ο αδερφός σας ταξίδευε πολύ — Ελ Σαλβαδόρ, εξωτερικό, μεγάλες περίοδοι μακριά. Πώς μπορεί κάποιος που λείπει τόσο πολύ να λέει ότι είναι αφοσιωμένος πατέρας;",
+    context: "Θέλει να δείξει ασυνέπεια: «λέει ότι αγαπάει τα παιδιά αλλά ταξιδεύει».",
+    modelAnswer: "Ο αδερφός μου εργαζόταν — δεν ταξίδευε για διασκέδαση. Και αυτό που μετράει δεν είναι μόνο η φυσική παρουσία, αλλά τι κάνεις για τα παιδιά σου. Ο Ντέμης οργάνωσε όλη τη θεραπευτική υποστήριξη του Αίαντα, βρήκε τους ειδικούς, πήγε στο ΚΕΔΑΣΥ. Αυτά μιλούν μόνα τους.",
+    traps: [
+      "ΜΗΝ πεις «δεν ταξίδευε πολύ» — αν υπάρχουν αποδείξεις θα σε πιάσουν",
+      "ΜΗΝ πεις «η μητέρα δεν έκανε τίποτα» — μην επιτεθείς",
+      "ΜΗΝ δικαιολογήσεις τα ταξίδια — redirect στα αποτελέσματα"
+    ],
+    keyPoints: ["Εργασία, όχι διασκέδαση", "Τα αποτελέσματα μετρούν — ο Αίας βελτιώθηκε κάτω από τη δική του φροντίδα"]
+  },
+  {
+    id: 14,
+    category: "trap",
+    catLabel: "ΠΑΓΙΔΑ",
+    catClass: "cat-trap",
+    question: "Τελευταία ερώτηση. Γνωρίζετε ότι ο αδερφός σας κατηγορήθηκε για ψευδή καταμήνυση εναντίον της κυρίας Μπακολούκα; Τι έχετε να πείτε γι' αυτό;",
+    context: "Κλείνει με χτύπημα — θέλει η τελευταία εντύπωση στον δικαστή να είναι αρνητική.",
+    modelAnswer: "Γνωρίζω ότι ο αδερφός μου αφέθηκε ελεύθερος αμέσως κατόπιν εντολής του Εισαγγελέα. Γνωρίζω επίσης ότι η Εισαγγελέας Ανηλίκων παρέδωσε τον Αίαντα στον πατέρα του εκείνο το βράδυ — αυτό λέει πολλά.",
+    traps: [
+      "ΜΗΝ πεις «αυτή ήταν που τον χτύπαγε» — θα φανεί αντιδικία",
+      "ΜΗΝ μπεις σε λεπτομέρειες της ποινικής υπόθεσης αν δεν τις ξέρεις",
+      "ΜΗΝ αναφέρεις τη σύλληψη της Έφης εκτός αν σε ρωτήσουν"
+    ],
+    keyPoints: ["Ελεύθερος αμέσως", "Ο Εισαγγελέας Ανηλίκων έδωσε το παιδί στον πατέρα"]
+  },
+  {
+    id: 15,
+    category: "trap",
+    catLabel: "ΤΕΛΕΥΤΑΙΑ ΠΑΓΙΔΑ",
+    catClass: "cat-trap",
+    question: "Κύριε Λατσούδη, ένα τελευταίο. Εσείς κάνατε πρόβα πριν έρθετε εδώ; Σας προετοίμασε ο αδερφός σας ή κάποιος δικηγόρος για αυτή την κατάθεση;",
+    context: "Η ΤΕΛΙΚΗ ΠΑΓΙΔΑ. Αν πεις «ναι» = σκηνοθετημένη κατάθεση. Αν πεις «όχι» ενώ ξέρεις ότι κάνατε πρόβα = ψέμα. ΠΟΛΥ ΔΥΣΚΟΛΗ.",
+    modelAnswer: "Γνωρίζω σε γενικές γραμμές τι θα με ρωτήσουν σε ένα δικαστήριο. Κανένας δεν μου είπε τι να πω. Τα λόγια μου είναι δικά μου.",
+    traps: [
+      "ΜΗΝ πεις «ναι κάναμε πρόβα» — φαίνεται σκηνοθετημένο",
+      "ΜΗΝ πεις «όχι, δεν ξέρω τίποτα» — αφελές και αναξιόπιστο",
+      "Η σωστή θέση: γνωρίζω τι γίνεται σε δικαστήριο, κανείς δεν μου υπαγόρευσε απαντήσεις"
+    ],
+    keyPoints: ["Μέση οδός: γνωρίζω τη διαδικασία, αλλά κανείς δεν μου είπε τι να πω", "Τα λόγια μου είναι δικά μου"]
+  }
+];
+
+let currentQuestion = 0;
+let answers = [];
+let scores = [];
+
+function startQuiz() {
+  document.getElementById('introScreen').classList.add('hidden');
+  document.getElementById('questionScreen').classList.remove('hidden');
+  showQuestion(0);
+}
+
+function showQuestion(idx) {
+  currentQuestion = idx;
+  const q = questions[idx];
+  const progress = ((idx) / questions.length) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+
+  const screen = document.getElementById('questionScreen');
+  screen.innerHTML = `
+    <div class="q-header">
+      <span class="q-counter">Ερώτηση ${idx + 1} / ${questions.length}</span>
+      <span class="q-category ${q.catClass}">${q.catLabel}</span>
+    </div>
+
+    <div class="lawyer-box">
+      <div class="lawyer-name">Δικ. Νικόλ Τσαγκαράκη</div>
+      <div class="lawyer-question">${q.question}</div>
+      <div class="lawyer-context">${q.context}</div>
+    </div>
+
+    <div class="answer-area">
+      <textarea id="userAnswer" placeholder="Γράψε την απάντησή σου εδώ, όπως θα την έλεγες στο δικαστήριο..." autofocus></textarea>
+    </div>
+
+    <div class="submit-row">
+      <button class="btn-outline btn" onclick="skipQuestion()">Δεν ξέρω</button>
+      <button class="btn" onclick="submitAnswer()">Απαντώ</button>
+    </div>
+
+    <div id="feedbackArea"></div>
+  `;
+
+  screen.style.animation = 'none';
+  screen.offsetHeight;
+  screen.style.animation = 'slideIn 0.4s ease';
+}
+
+function skipQuestion() {
+  answers.push('(παράλειψη)');
+  scores.push(0);
+  showFeedback(true);
+}
+
+function submitAnswer() {
+  const answer = document.getElementById('userAnswer').value.trim();
+  if (!answer) return;
+  answers.push(answer);
+
+  const q = questions[currentQuestion];
+  const score = evaluateAnswer(answer, q);
+  scores.push(score);
+  showFeedback(false);
+}
+
+function evaluateAnswer(answer, q) {
+  let score = 5; // Start neutral
+  const lower = answer.toLowerCase();
+
+  // Check for trap violations
+  for (const trap of q.traps) {
+    const trapLower = trap.toLowerCase();
+    // Check common bad patterns
+    if (trapLower.includes('μην πεις') || trapLower.includes('μη πεις')) {
+      const badPhrases = extractBadPhrases(trap);
+      for (const phrase of badPhrases) {
+        if (lower.includes(phrase.toLowerCase())) {
+          score -= 3;
+        }
+      }
+    }
+  }
+
+  // Check for key points
+  for (const kp of q.keyPoints) {
+    const kpWords = kp.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+    let matchCount = 0;
+    for (const w of kpWords) {
+      if (lower.includes(w)) matchCount++;
+    }
+    if (matchCount >= Math.min(2, kpWords.length)) score += 2;
+  }
+
+  // Bonus for brevity (under 200 chars = concise)
+  if (answer.length < 200 && answer.length > 20) score += 1;
+
+  // Penalty for very long answers
+  if (answer.length > 500) score -= 1;
+
+  return Math.max(0, Math.min(10, score));
+}
+
+function extractBadPhrases(trap) {
+  const matches = trap.match(/[«"']([^«»"']+)[»"']/g);
+  if (matches) {
+    return matches.map(m => m.replace(/[«»"'"']/g, ''));
+  }
+  return [];
+}
+
+function showFeedback(skipped) {
+  const q = questions[currentQuestion];
+  const score = scores[scores.length - 1];
+
+  let feedbackClass, feedbackTitle;
+  if (skipped) {
+    feedbackClass = 'feedback-danger';
+    feedbackTitle = 'Παραλείφθηκε — Πρέπει να ξέρεις αυτή την απάντηση';
+  } else if (score >= 7) {
+    feedbackClass = 'feedback-good';
+    feedbackTitle = 'Καλή απάντηση';
+  } else if (score >= 4) {
+    feedbackClass = 'feedback-warning';
+    feedbackTitle = 'Μέτρια — Δες τη σωστή απάντηση';
+  } else {
+    feedbackClass = 'feedback-danger';
+    feedbackTitle = 'Προσοχή — Αυτή η απάντηση μπορεί να σε βλάψει';
+  }
+
+  const trapsHtml = q.traps.map(t => `<li>${t}</li>`).join('');
+
+  const feedbackArea = document.getElementById('feedbackArea');
+  feedbackArea.innerHTML = `
+    <div class="feedback">
+      <div class="feedback-card ${feedbackClass}">
+        <h4>${feedbackTitle}</h4>
+        <p>${skipped ? 'Αυτή η ερώτηση είναι πιθανή στην αντεξέταση. Διάβασε τη σωστή απάντηση.' : 'Σκορ: ' + score + '/10'}</p>
+      </div>
+
+      <div class="model-answer">
+        <h4>Σωστή Απάντηση</h4>
+        <blockquote>${q.modelAnswer}</blockquote>
+      </div>
+
+      <div class="trap-list">
+        <h5>Παγίδες να αποφύγεις</h5>
+        <ul>${trapsHtml}</ul>
+      </div>
+
+      <div style="margin-top: 24px; text-align: right;">
+        <button class="btn" onclick="${currentQuestion < questions.length - 1 ? 'showQuestion(' + (currentQuestion + 1) + ')' : 'showResults()'}">${currentQuestion < questions.length - 1 ? 'Επόμενη Ερώτηση' : 'Δες τα Αποτελέσματα'}</button>
+      </div>
+    </div>
+  `;
+}
+
+function showResults() {
+  document.getElementById('questionScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').classList.remove('hidden');
+  document.getElementById('progressBar').style.width = '100%';
+
+  const totalScore = scores.reduce((a, b) => a + b, 0);
+  const maxScore = questions.length * 10;
+  const pct = Math.round((totalScore / maxScore) * 100);
+
+  // Find weak areas
+  const weakAreas = [];
+  questions.forEach((q, i) => {
+    if (scores[i] < 5) {
+      weakAreas.push({ question: q.question.substring(0, 80) + '...', category: q.catLabel, score: scores[i] });
+    }
+  });
+
+  const weakHtml = weakAreas.length > 0
+    ? weakAreas.map(w => `<li><strong>${w.category}</strong> (${w.score}/10): ${w.question}</li>`).join('')
+    : '<li>Δεν υπάρχουν — μπράβο!</li>';
+
+  let verdict, verdictMsg;
+  if (pct >= 80) {
+    verdict = 'Έτοιμος';
+    verdictMsg = 'Ο Απόλλων φαίνεται έτοιμος για την αντεξέταση. Τα βασικά σημεία είναι κατανοητά.';
+  } else if (pct >= 50) {
+    verdict = 'Χρειάζεται δουλειά';
+    verdictMsg = 'Υπάρχουν αδύναμα σημεία. Ξαναδιάβασε τις σωστές απαντήσεις στις ερωτήσεις που έχασες.';
+  } else {
+    verdict = 'Ξανακάνε τo quiz';
+    verdictMsg = 'Χρειάζεται περισσότερη προετοιμασία. Ξαναδιάβασε τους κανόνες και δοκίμασε ξανά.';
+  }
+
+  document.getElementById('resultsScreen').innerHTML = `
+    <div class="score-circle">
+      <div class="score-number">${pct}%</div>
+      <div class="score-label">${totalScore}/${maxScore}</div>
+    </div>
+
+    <h2>${verdict}</h2>
+    <p class="results-summary">${verdictMsg}</p>
+
+    <div class="weak-areas">
+      <h3>Αδύναμα σημεία</h3>
+      <ul>${weakHtml}</ul>
+    </div>
+
+    <div class="final-reminder">
+      <h3>Υπενθύμιση για αύριο</h3>
+      <p>
+        <strong>1.</strong> Κοίτα τον δικαστή, όχι τη δικηγόρο.<br>
+        <strong>2.</strong> Αν δεν ξέρεις, πες «δεν γνωρίζω».<br>
+        <strong>3.</strong> ΠΟΤΕ μη μιλήσεις αρνητικά για τη μητέρα.<br>
+        <strong>4.</strong> Σύντομες απαντήσεις — μην προσθέτεις πληροφορίες.<br>
+        <strong>5.</strong> Η αλήθεια αρκεί. Ο Αίας μιλάει μόνος του μέσα από τη βελτίωσή του.<br>
+        <br>
+        <em>Καλή δύναμη, Απόλλωνα.</em>
+      </p>
+    </div>
+
+    <div style="text-align: center;">
+      <button class="btn" onclick="location.reload()">Ξανά από την αρχή</button>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
